@@ -25,11 +25,11 @@ function App() {
     const detectedColumns = parsedRows.length > 0 ? Object.keys(parsedRows[0]) : [];
     setColumns(detectedColumns);
 
-    setMapping((previous) => ({
-      gender: detectedColumns.includes(previous.gender) ? previous.gender : '',
-      outcome: detectedColumns.includes(previous.outcome) ? previous.outcome : '',
-      features: previous.features.filter((feature) => detectedColumns.includes(feature)),
-    }));
+    setMapping({
+      gender: '',
+      outcome: '',
+      features: [],
+    });
 
     setAuditResult(null);
     setError('');
