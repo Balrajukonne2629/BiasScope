@@ -5,7 +5,7 @@ import ColumnMapper from './components/ColumnMapper';
 import Dashboard from './components/Dashboard';
 import './App.css';
 
-const AUDIT_API_URL = 'http://localhost:8000/api/v1/audit';
+const API_URL = import.meta.env.VITE_API_URL;
 
 function App() {
   const [rows, setRows] = useState([]);
