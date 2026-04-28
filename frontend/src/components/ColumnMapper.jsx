@@ -1,8 +1,9 @@
 function ColumnMapper({ columns, mapping, onMappingChange, disabled }) {
   const selectedGender = mapping.gender || '';
   const selectedOutcome = mapping.outcome || '';
-  const selectedFeatures = mapping.features.filter(
-    (feature) => feature !== selectedGender && feature !== selectedOutcome,
+  const featureCol = mapping.features[0] || '';
+  const filteredColumns = columns.filter(
+    (column) => column !== selectedGender && column !== selectedOutcome,
   );
 
   const handleSingleChange = (field) => (event) => {
@@ -27,20 +28,16 @@ function ColumnMapper({ columns, mapping, onMappingChange, disabled }) {
     onMappingChange(nextMapping);
   };
 
-  const handleFeaturesChange = (event) => {
-    const selected = Array.from(event.target.selectedOptions)
-      .map((option) => option.value)
-      .filter((value) => value !== selectedGender && value !== selectedOutcome);
-
+  const handleFeatureChange = (event) => {
+    const value = event.target.value;
     onMappingChange({
       ...mapping,
-      features: selected,
+      features: value ? [value] : [],
     });
   };
 
   const isGenderLocked = (column) => column === selectedOutcome && column !== selectedGender;
   const isOutcomeLocked = (column) => column === selectedGender && column !== selectedOutcome;
-  const isFeatureLocked = (column) => column === selectedGender || column === selectedOutcome;
 
   return (
     <section>
@@ -87,16 +84,15 @@ function ColumnMapper({ columns, mapping, onMappingChange, disabled }) {
           </div>
 
           <div style={{ display: 'grid', gap: '8px' }}>
-            <label htmlFor="feature-columns">Select Feature Columns</label>
+            <label htmlFor="feature-columns">Select Feature Column</label>
             <select
               id="feature-columns"
-              multiple
-              value={selectedFeatures}
-              onChange={handleFeaturesChange}
-              size={Math.min(6, Math.max(columns.length, 3))}
+              value={featureCol}
+              onChange={handleFeatureChange}
             >
-              {columns.map((column) => (
-                <option key={column} value={column} disabled={isFeatureLocked(column)}>
+              <option value="">Select feature</option>
+              {filteredColumns.map((column) => (
+                <option key={column} value={column}>
                   {column}
                 </option>
               ))}

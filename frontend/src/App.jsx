@@ -38,11 +38,12 @@ function App() {
   const canRunAudit =
     rows.length > 0 &&
     mapping.gender.trim() !== '' &&
-    mapping.outcome.trim() !== '';
+    mapping.outcome.trim() !== '' &&
+    mapping.features.length > 0;
 
   const runAudit = async () => {
     if (!canRunAudit) {
-      setError('Please upload data and map gender/outcome columns before running the audit.');
+      setError('Please upload data and select gender, outcome, and one feature column before running the audit.');
       return;
     }
 
