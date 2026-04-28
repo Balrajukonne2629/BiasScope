@@ -8,6 +8,7 @@ from app.models import AuditRequest, AuditResponse, RecommendationCard, DataQual
 from app.core.rbi import compute_rbi
 from app.core.fairness import compute_dir_srd
 from app.core.correlation import compute_correlations
+from app.core.gemini_explainer import generate_explanation
 from app.core.recommendations import generate_recommendations
 from app.core.validator import validate_data
 
@@ -166,6 +167,11 @@ def audit(request: AuditRequest):
     rbi_label = _get_rbi_label(rbi_score)
     overall_status = _get_overall_status(dir_score, srd_score, rbi_score)
     top_issue = _get_top_issue(dir_score, srd_score, rbi_score)
+    ai_summary = (
+        generate_explanation(rbi_score, dir_score, srd_score)
+        if len(df) >= 50
+        else "AI summary unavailable"
+    )
 
     group_rates = {str(group): rate for group, rate in group_rates.items()}
     group_counts = {str(group): count for group, count in df[gender_col].value_counts().to_dict().items()}
@@ -200,4 +206,5 @@ def audit(request: AuditRequest):
         overall_status=overall_status,
         top_issue=top_issue,
         processing_time_ms=processing_time_ms,
+        ai_summary=ai_summary,
     )

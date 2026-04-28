@@ -29,6 +29,7 @@ class AuditResponse(BaseModel):
     dir: float
     dir_safe: bool           # False = division by zero hit, DIR set to 0
     srd: float
+    ai_summary: str
     group_rates: dict[str, float]        # hire rate per group
     group_counts: dict[str, int]         # row count per group
     correlation_scores: dict[str, Optional[float]]  # feature → Cramér's V
